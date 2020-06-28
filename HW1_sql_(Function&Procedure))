@@ -2,7 +2,8 @@
 
 <!-- /MarkdownTOC -->
 •	General queries
--- Write a function to convert miles per gallon to liters per 100 kilometers.
+Write a function to convert miles per gallon to liters per 100 kilometers.
+
 ```sql
 CREATE DEFINER=`root`@`localhost` FUNCTION `Convert_mg_to_kl`( mg INT) RETURNS int
     DETERMINISTIC
@@ -13,6 +14,7 @@ SET kl = mg / 3.78541 * 1.60934 / 100;
 RETURN kl;
 END
 ```
+
 
 
 •	General queries
