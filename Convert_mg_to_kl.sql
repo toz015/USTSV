@@ -1,0 +1,9 @@
+CREATE FUNCTION `Convert_mg_to_kl` (mg INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+DECLARE kl INT;
+SET kl = 0;
+SET kl = mg / 3.78541 * 1.60934 / 100;
+RETURN kl;
+END
