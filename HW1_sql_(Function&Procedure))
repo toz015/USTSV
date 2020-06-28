@@ -2,7 +2,7 @@
 
 <!-- /MarkdownTOC -->
 •	General queries
-Write a function to convert miles per gallon to liters per 100 kilometers.
+	-- Write a function to convert miles per gallon to liters per 100 kilometers.
 
 ```sql
 CREATE DEFINER=`root`@`localhost` FUNCTION `Convert_mg_to_kl`( mg INT) RETURNS int
@@ -15,7 +15,14 @@ RETURN kl;
 END
 ```
 
+```sql
+select t1.date, t1.cash_flow, sum(t2.cash_flow)
+    from transactions t1, transactions t2
+    where t1.date >= t2.date
+    group by t1.date, t1.cash_flow
+    order by date_trunc('day', t1.date)
 
+```
 
 •	General queries
 	-- Write a procedure to increase the price of a specified product category by a given percentage. 
