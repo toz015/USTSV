@@ -1,6 +1,10 @@
 # Get familiar with MySQL workbench
 <!-- MarkdownTOC -->
-
+- [Basic query](#Basic_query)
+	- [Select customers located in New York](#Select_customers_located_in_New_York)
+	- [Select Product](#Select_Product)
+	- [Alter a table](#Alter_a_table)
+	
 - [Schema](#Schema)
 - [Tables](#Tables)
 - [Procedures](#Procedures)
@@ -10,8 +14,33 @@
 
 
 <!-- /MarkdownTOC -->
+Select customers located in New York.
+Select Product 
+Alter a table
+### Basic query
+#### Select customers located in New York
+```sql
+Select *
+from classicmodels.customers
+where state = 'NY';
+```
 
+#### Select Product 
+```sql
+Select *
+from classicmodels.products;
+```
+#### Alter a table
+```sql
+ALTER TABLE classicmodels.part
+ADD EXTRA VARCHAR(255);
 
+SELECT *
+FROM classicmodels.part;
+
+ALTER TABLE classicmodels.part
+DROP COLUMN EXTRA;
+```
 ### Schema
 ```sql
 
