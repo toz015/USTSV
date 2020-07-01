@@ -6,12 +6,12 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
 
 
 <!-- /MarkdownTOC -->
-- [Single entity](# Single-entity)
-  - [1 Prepare a list of offices sorted by country, state, city](# Prepare-a-list-of-offices-sorted-by-country-state-city)
-  - [2 How many employees are there in the company?](# How-many-employees-are-there-in-the-company?)
-  - [3 What is the total of payments received?](# What-is-the-total-of-payments-received?)
-  - [4 List the product lines that contain 'Cars'](# List-the-product-lines-that-contain-'Cars')
-  - [5 Report total payments for October 28, 2004](# Report-total-payments-for-October-28-2004)
+- [Single entity](#Single-entity)
+  - [1 Prepare a list of offices sorted by country, state, city](#Prepare-a-list-of-offices-sorted-by-country-state-city)
+  - [2 How many employees are there in the company?](#How-many-employees-are-there-in-the-company?)
+  - [3 What is the total of payments received?](#What-is-the-total-of-payments-received?)
+  - [4 List the product lines that contain 'Cars'](#List-the-product-lines-that-contain-'Cars')
+  - [5 Report total payments for October 28, 2004](#Report-total-payments-for-October-28-2004)
 
 
 
