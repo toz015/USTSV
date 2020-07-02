@@ -34,10 +34,17 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
   - [8 Report those payments greater than $100,000](#Report-those-payments-greater-than-100000-dollar)
   - [9 List the value of 'On Hold' orders](#List-the-value-of-On-Hold-orders)
   - [10 Report the number of orders 'On Hold' for each customer](#Report-the-number-of-orders-On-Hold-for-each-customer)
-  
 
-
-
+- [Many to many relationship](#Many-to-many-relationship)
+  - [1 List products sold by order date](#List-products-sold-by-order-date)
+  - [2 List the order dates in descending order for orders for the 1940 Ford Pickup Truck](#List-the-order-dates-in-descending-order-for-orders-for-the-1940-Ford-Pickup-Truck)
+  - [3 List the names of customers and their corresponding order number where a particular order from that customer has a value greater than $25,000?](#List-the-names-of-customers-and-their-corresponding-order-number-where-a-particular-order-from-that-customer-has-a-value-greater-than-25000-dollar)
+  - [4 Are there any products that appear on all orders?](#Are-there-any-products-that-appear-on-all-orders)
+  - [5 List the names of products sold at less than 80% of the MSRP](#List-the-names-of-products-sold-at-less-than-0.8-of-the-MSRP)
+  - [6 Reports those products that have been sold with a markup of 100% or more](#Reports-those-products-that-have-been-sold-with-a-markup-of-1-or-more)
+  - [7 List the products ordered on a Monday](#List-the-products-ordered-on-a-Monday)
+  - [8 What is the quantity on hand for products listed on 'On Hold' orders?](#What-is-the-quantity-on-hand-for-products-listed-on-On-Hold-orders)
+- [Regular expressions](#Regular-expressions)
 
 <!-- /MarkdownTOC -->
 ### Single entity
@@ -208,8 +215,34 @@ ORDER BY od.orderNumber;
 #### Report the number of orders On Hold for each customer
 ```sql
 SELECT COUNT(DISTINCT orderNumber) as CNT, c.customerName
-FROM orders o JOIN customers c
-WHERE c.customerNumber = o.customerNumber AND o.status = 'On Hold'
+FROM orders o RIGHT JOIN customers c
+ON c.customerNumber = o.customerNumber AND o.status = 'On Hold'
 GROUP BY c.customerNumber
-ORDER BY c.customerNumber;
+ORDER BY COUNT(DISTINCT orderNumber) DESC;
 ```
+### Many to many relationship
+#### List products sold by order date
+```sql
+```
+#### List the order dates in descending order for orders for the 1940 Ford Pickup Truck
+```sql
+```
+#### List the names of customers and their corresponding order number where a particular order from that customer has a value greater than 25000 dollar
+```sql
+```
+#### Are there any products that appear on all orders
+```sql
+```
+#### List the names of products sold at less than 0.8 of the MSRP
+```sql
+```
+#### Reports those products that have been sold with a markup of 1 or more
+```sql
+```
+#### List the products ordered on a Monday
+```sql
+```
+#### What is the quantity on hand for products listed on On Hold orders
+```sql
+```
+### Regular expressions
