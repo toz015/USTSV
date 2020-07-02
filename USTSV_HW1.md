@@ -56,7 +56,9 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
   - [9 List the names of employees called Larry or Barry](#List-the-names-of-employees-called-Larry-or-Barry)
   - [10 List the names of employees with non-alphabetic characters in their names](#List-the-names-of-employees-with-non-alphabetic-characters-in-their-names)
   - [11 List the vendors whose name ends in Diecast](#List-the-vendors-whose-name-ends-in-Diecast)
-
+- [General queries](#General-queries)
+  - [1]
+	
 <!-- /MarkdownTOC -->
 ## Single entity
 
