@@ -47,7 +47,7 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
 - [Regular expressions](#Regular-expressions)
 
 <!-- /MarkdownTOC -->
-### Single entity
+## Single entity
 
 #### Prepare a list of offices sorted by country state city
 
@@ -146,7 +146,7 @@ SELECT orderNumber
 From orderdetails 
 WHERE priceEach * quantityOrdered > 5000;
 ```
-### One to many relationship
+## One to many relationship
 #### Report the account representative for each customer
 ```sql
 SELECT customerName, Employees.firstName as representative
@@ -220,7 +220,7 @@ ON c.customerNumber = o.customerNumber AND o.status = 'On Hold'
 GROUP BY c.customerNumber
 ORDER BY COUNT(DISTINCT orderNumber) DESC;
 ```
-### Many to many relationship
+## Many to many relationship
 #### List products sold by order date
 ```sql
 ```
