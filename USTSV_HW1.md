@@ -20,8 +20,8 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
   - [11 What is the average percentage markup of the MSRP on buyPrice?](#What-is-the-average-percentage-markup-of-the-MSRP-on-buyPrice?)
   - [12 How many distinct products does ClassicModels sell?](#How-many-distinct-products-does-ClassicModels-sell?)
   - [13 Report the name and city of customers who don't have sales representatives?](#Report-the-name-and-city-of-customers-who-don't-have-sales-representatives?)
-  - [14 What are the names of executives with VP or Manager in their title?](#What-are-the-names-of-executives-with-VP-or-Manager-in-their-title?)
-  - [15 Which orders have a value greater than $5,000?](#Which-orders-have-a-value-greater-than-$5,000?)
+  - [14 What are the names of executives with VP or Manager in their title?](#What-are-the-names-of-executives-with-VP-or-Manager-in-their-title-)
+  - [15 Which orders have a value greater than $5,000?](#Which-orders-have-a-value-greater-than--5-000-)
   
 - [One to many relationship](#One-to-many-relationship)
   - [Report the account representative for each customer](#Report-the-account-representative-for-each-customer)
