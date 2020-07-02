@@ -45,6 +45,17 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
   - [7 List the products ordered on a Monday](#List-the-products-ordered-on-a-Monday)
   - [8 What is the quantity on hand for products listed on 'On Hold' orders?](#What-is-the-quantity-on-hand-for-products-listed-on-On-Hold-orders)
 - [Regular expressions](#Regular-expressions)
+  - [1 Find products containing the name 'Ford'](#Find-products-containing-the-name-Ford)
+  - [2 List products ending in 'ship'](#List-products-ending-in-ship)
+  - [3 Report the number of customers in Denmark, Norway, and Sweden](#Report-the-number-of-customers-in-Denmark-Norway-and-Sweden)
+  - [4 What are the products with a product code in the range S700_1000 to S700_1499?](#What-are-the-products-with-a-product-code-in-the-range-S700-1000-to-S700-1499)
+  - [5 Which customers have a digit in their name?](#Which-customers-have-a-digit-in-their-name)
+  - [6 List the names of employees called Dianne or Diane](#List-the-names-of-employees-called-Dianne-or-Diane)
+  - [7 List the products containing ship or boat in their product name](#List-the-products-containing-ship-or-boat-in-their-product-name)
+  - [8 List the products with a product code beginning with S700](#List-the-products-with-a-produc-code-beginning-with-S700)
+  - [9 List the names of employees called Larry or Barry](#List-the-names-of-employees-called-Larry-or-Barry)
+  - [10 List the names of employees with non-alphabetic characters in their names](#List-the-names-of-employees-with-non-alphabetic-characters-in-their-names)
+  - [11 List the vendors whose name ends in Diecast](#List-the-vendors-whose-name-ends-in-Diecast)
 
 <!-- /MarkdownTOC -->
 ## Single entity
@@ -281,3 +292,77 @@ AND od.orderNumber = o.orderNumber
 AND o.status = 'On Hold';
 ```
 ### Regular expressions
+
+#### Find products containing the name Ford
+```sql
+SELECT * FROM products
+WHERE productName LIKE '%Ford%';
+```
+#### List products ending in ship
+```sql
+SELECT * FROM products
+WHERE productName LIKE '%ship';
+```
+#### Report the number of customers in Denmark Norway and Sweden
+```sql
+SELECT COUNT(DISTINCT customerNumber) as customer_num
+FROM customers c 
+WHERE c.country = 'Sweden' or c.country = 'Denmark Norway';
+```
+#### What are the products with a product code in the range S700 1000 to S700 1499
+```sql
+SELECT p.productCode, p.productName FROM 
+productS p,
+(SELECT productCode, 
+SUBSTRING(productCode, 
+LOCATE('S', productCode) + 1, LOCATE('_', productCode) - LOCATE('S', productCode)) AS Num1,
+SUBSTRING(productCode, 
+LOCATE( '_', productCode) + 1, LENGTH(productCode) - LOCATE( '_', productCode) ) 
+as Num2 FROM products) AS p2
+WHERE p.productCode = p2.productCode and p2.Num2 BETWEEN 1000 AND 1499 AND p2.Num1 = 700;
+```
+#### Which customers have a digit in their name
+```sql
+SELECT * FROM 
+customers
+WHERE customerName REGEXP '[0-9]';
+```
+#### List the names of employees called Dianne or Diane
+```sql
+SELECT * 
+FROM employees
+WHERE firstName = 'Dianne' or firstName = 'Diane'
+	or lastName = 'Dianne' or lastName = 'Diane';
+```
+#### List the products containing ship or boat in their product name
+```sql
+SELECT * 
+FROM products
+WHERE productName LIKE '%ship%' or productName LIKE '%boat%';
+```
+#### List the products with a product code beginning with S700
+```sql
+SELECT * 
+FROM products
+WHERE productCode LIKE 'S700%' ;
+```
+#### List the names of employees called Larry or Barry
+```sql
+SELECT * 
+FROM employees
+WHERE firstName = 'Larry' or firstName = 'Barry'
+	or lastName = 'Larry' or lastName = 'Barry';
+```
+#### List the names of employees with non alphabetic characters in their names
+```sql
+SELECT CONCAT(firstName, ' ', lastName) as Name 
+FROM employees
+WHERE firstName NOT LIKE '%[^a-z]%'
+AND lastName NOT LIKE '%[^a-z]%';
+```
+#### List the vendors whose name ends in Diecast
+```sql
+SELECT DISTINCT productVendor
+FROM products 
+WHERE productVendor LIKE '%Diecast';
+```
