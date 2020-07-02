@@ -223,26 +223,61 @@ ORDER BY COUNT(DISTINCT orderNumber) DESC;
 ## Many to many relationship
 #### List products sold by order date
 ```sql
+FROM orderdetails od, orders o, products p
+WHERE p.productCode = od.productCode AND od.orderNumber = o.orderNumber
+GROUP BY 1, 2, 3
+ORDER BY o.orderDate
 ```
 #### List the order dates in descending order for orders for the 1940 Ford Pickup Truck
 ```sql
+SELECT orderDate
+FROM orderdetails od, orders o, products p
+WHERE p.productCode = od.productCode AND od.orderNumber = o.orderNumber
+AND productName = '1940 Ford Pickup Truck'
+ORDER BY orderDate DESC;
 ```
 #### List the names of customers and their corresponding order number where a particular order from that customer has a value greater than 25000 dollar
 ```sql
+ 
+SELECT DISTINCT customerName, o.orderNumber 
+FROM orderdetails od, orders o, customers c
+WHERE c.customerNumber = o.customerNumber AND od.orderNumber = o.orderNumber
+AND od.quantityOrdered * od.priceEach
 ```
 #### Are there any products that appear on all orders
 ```sql
+SELECT customerName, o.orderNumber , ROUND(SUM(od.quantityOrdered * od.priceEach ), 2) AS VAL
+FROM orderdetails od, orders o, customers c
+WHERE c.customerNumber = o.customerNumber AND od.orderNumber = o.orderNumber
+GROUP BY o.orderNumber HAVING VAL > 25000
 ```
 #### List the names of products sold at less than eighty percent of the MSRP
 ```sql
+SELECT  DISTINCT p.productName, p.productCode
+FROM orderdetails od, products p
+WHERE od.productCode = p.productCode
+and od.priceEach/p.MSRP < 0.8;
 ```
 #### Reports those products that have been sold with a markup of 1 or more
 ```sql
+SELECT  DISTINCT p.productName, p.productCode
+FROM orderdetails od, products p
+WHERE od.productCode = p.productCode
+and od.priceEach > 2 *P.buyPrice;
 ```
 #### List the products ordered on a Monday
 ```sql
+SELECT  DISTINCT p.productName, p.productCode
+FROM orderdetails od, products p, orders o
+WHERE od.productCode = p.productCode AND od.orderNumber = o.orderNumber
+AND WEEK(o.orderDate) = 0;
 ```
 #### What is the quantity on hand for products listed on On Hold orders
 ```sql
+SELECT p.quantityInStock as stock, p.productName
+FROM orderdetails od, products p, orders o
+WHERE od.productCode = p.productCode
+AND od.orderNumber = o.orderNumber
+AND o.status = 'On Hold';
 ```
 ### Regular expressions
