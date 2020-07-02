@@ -40,7 +40,7 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
   - [2 List the order dates in descending order for orders for the 1940 Ford Pickup Truck](#List-the-order-dates-in-descending-order-for-orders-for-the-1940-Ford-Pickup-Truck)
   - [3 List the names of customers and their corresponding order number where a particular order from that customer has a value greater than $25,000?](#List-the-names-of-customers-and-their-corresponding-order-number-where-a-particular-order-from-that-customer-has-a-value-greater-than-25000-dollar)
   - [4 Are there any products that appear on all orders?](#Are-there-any-products-that-appear-on-all-orders)
-  - [5 List the names of products sold at less than 80% of the MSRP](#List-the-names-of-products-sold-at-less-than-0.8-of-the-MSRP)
+  - [5 List the names of products sold at less than 80% of the MSRP](#List-the-names-of-products-sold-at-less-than-eighty-percent-of-the-MSRP)
   - [6 Reports those products that have been sold with a markup of 100% or more](#Reports-those-products-that-have-been-sold-with-a-markup-of-1-or-more)
   - [7 List the products ordered on a Monday](#List-the-products-ordered-on-a-Monday)
   - [8 What is the quantity on hand for products listed on 'On Hold' orders?](#What-is-the-quantity-on-hand-for-products-listed-on-On-Hold-orders)
@@ -233,7 +233,7 @@ ORDER BY COUNT(DISTINCT orderNumber) DESC;
 #### Are there any products that appear on all orders
 ```sql
 ```
-#### List the names of products sold at less than 0.8 of the MSRP
+#### List the names of products sold at less than eighty percent of the MSRP
 ```sql
 ```
 #### Reports those products that have been sold with a markup of 1 or more
