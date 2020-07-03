@@ -434,28 +434,82 @@ ORDER BY AVG(DAY(shippedDate - orderDate)) DESC;
 ```
 #### What is the value of orders shipped in August 2004
 ```sql
+SELECT ROUND(SUM(od.quantityOrdered * od.priceEach), 2) AS Val
+FROM orderdetails od, orders o
+WHERE od.orderNumber = o.orderNumber AND o.shippedDate BETWEEN '2004-08-01' AND '2004-08-31';
 ```
 #### Compute the total value ordered total amount paid and their difference for each customer for orders placed in 2004 and payments received in 2004 
+ Hint; Create views for the total paid and total ordered).
 ```sql
+DROP VIEW IF EXISTS total_order;
+CREATE VIEW total_order AS
+SELECT SUM(od.quantityOrdered * od.priceEach) AS order_val, c.customerNumber
+FROM orderdetails od, orders o, customers c, payments p
+WHERE od.orderNumber = o.orderNumber AND c.customerNumber = o.customerNumber
+AND YEAR(o.orderDate) = 2004
+GROUP BY c.customerNumber;
+
+DROP VIEW IF EXISTS total_pay;
+CREATE VIEW total_pay AS
+SELECT SUM(amount) AS pay_amount, p.customerNumber
+FROM payments p 
+WHERE YEAR(p.paymentDate) = 2004
+GROUP BY customerNumber;
+
+SELECT order_val - pay_amount AS diff, tp.customerNumber
+FROM total_pay tp, total_order td
+WHERE tp.customerNumber = tp.customerNumber
+GROUP BY tp.customerNumber
 ```
 #### List the employees who report to those employees who report to Diane Murphy
 Use the CONCAT function to combine the employee's first name and last name into a single field for reporting
 ```sql
+SELECT CONCAT(e1.firstName, ' ', e1.lastName) AS employee_Name
+FROM employees e1, employees e2, employees e3
+WHERE e1.reportsTo = e2.employeeNumber
+AND e2.reportsTo = e3.employeeNumber
+AND e3.firstName =  'Diane' AND e3.lastName = 'Murphy';
 ```
 #### What is the percentage value of each product in inventory sorted by the highest percentage first
 ```sql
-
+SELECT CONCAT(p1.quantityInStock / t1.invt* 100, '%') AS invt_percent, p1.productCode  
+FROM products p1,
+(SELECT SUM(quantityInstock) AS invt
+FROM products) AS t1
+ORDER BY p1.quantityInStock / t1.invt DESC;
 ```
 
 #### Write a function to convert miles per gallon to liters per 100 kilometers
 ```sql
+CREATE FUNCTION `Convert_mg_to_kl` (mg INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+DECLARE kl INT;
+SET kl = 0;
+SET kl = mg / 3.78541 * 1.60934 / 100;
+RETURN kl;
+END
+
 ```
 #### Write a procedure to increase the price of a specified product category by a given percentage. 
 You will need to create a product table with appropriate data to test your procedure. Alternatively, load the ClassicModels database on your personal machine so you have complete access. You have to change the DELIMITER prior to creating the procedure.
 ```sql
+CREATE DEFINER=`root`@`localhost` PROCEDURE `increase_price`(IN product_name VARCHAR(70), percentage DECIMAL)
+BEGIN
+	UPDATE products
+	SET buyPrice = buyPrice * (1 + percentage)
+	WHERE productName = product_name;
+END
 ```
 #### What is the value of orders shipped in August 2004
 ```sql
+
+SELECT ROUND(SUM(quantityOrdered * priceEach),2) AS od_shipped FROM(
+SELECT YEAR(o.shippedDate) AS YR, od.quantityOrdered, od.priceEach
+FROM orderdetails od, orders o
+WHERE od.orderNumber = o.orderNumber) AS TB1
+WHERE YR = 2004;
 ```
 #### What is the ratio the value of payments made to orders received for each month of 2004
 (i.e., divide the value of payments made by the orders received)
