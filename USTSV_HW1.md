@@ -641,16 +641,16 @@ ORDER BY profit DESC;
 ```
 #### Compute the ratio for each product of sales for 2003 versus 2004
 ```sql
-SELECT tb1.CNT/tb2.CNT AS ratio, tb1.productCode, tb1.productName 
+SELECT CONCAT(ROUND(tb1.sales /tb2.sales *100, 2), '%') AS ratio, tb1.productCode, tb1.productName 
 FROM 
-(SELECT SUM(od.quantityOrdered) AS CNT, od.productCode, pd.productName
+(SELECT SUM(od.quantityOrdered * od.priceEach) AS sales, od.productCode, pd.productName
 FROM orderdetails od, orders o, products pd
 WHERE YEAR(o.orderDate) = 2003
 AND o.orderNumber = od.orderNumber
 AND od.productCode = pd.productCode
 GROUP BY od.productCode, pd.productName
 ) AS tb1, 
-(SELECT SUM(od.quantityOrdered) AS CNT, od.productCode, pd.productName
+(SELECT SUM(od.quantityOrdered * od.priceEach) AS sales, od.productCode, pd.productName
 FROM orderdetails od, orders o, products pd
 WHERE YEAR(o.orderDate) = 2004
 AND o.orderNumber = od.orderNumber
@@ -659,11 +659,48 @@ GROUP BY od.productCode, pd.productName) AS tb2;
 ```
 #### Compute the ratio of payments for each customer for 2003 versus 2004
 ```sql
+SELECT CONCAT(ROUND(tb1.pay/tb2.pay * 100, 2), '%') AS ratio, tb1.customerNumber, tb1.customerName
+FROM (
+SELECT SUM(p.amount) AS pay, c.customerNumber, c.customerName 
+FROM payments p, customers c, orders o
+WHERE YEAR(p.paymentDate) = 2003 AND YEAR(o.orderDate) = 2003
+AND o.customerNumber = c.customerNumber
+AND p.customerNumber = c.customerNumber
+GROUP BY c.customerName, c.customerNumber) tb1,
+(SELECT SUM(p.amount) AS pay, c.customerNumber, c.customerName 
+FROM payments p, customers c, orders o
+WHERE YEAR(p.paymentDate) = 2004 AND YEAR(o.orderDate) = 2004
+AND o.customerNumber = c.customerNumber
+AND p.customerNumber = c.customerNumber
+GROUP BY c.customerName, c.customerNumber) tb2
+WHERE tb1.customerNumber = tb2.customerNumber
+ORDER BY ratio DESC;
 ```
 #### Find the products sold in 2003 but not 2004
 ```sql
+SELECT DISTINCT pd.productCode, pd.productName
+FROM products pd, orderdetails od, orders o
+WHERE YEAR(o.orderDate) = 2003
+AND pd.productCode = od.productCode
+AND o.orderNumber = od.orderNumber
+AND pd.productCode NOT IN 
+(SELECT DISTINCT pd.productCode
+FROM products pd, orderdetails od, orders o
+WHERE YEAR(o.orderDate) = 2004
+AND pd.productCode = od.productCode
+AND o.orderNumber = od.orderNumber
+AND pd.productCode
 ```
 #### Find the customers without payments in 2003
 ```sql
+SELECT DISTINCT c.customerNumber, c.customerName
+FROM customers c
+WHERE 
+c.customerNumber
+NOT IN
+(SELECT DISTINCT c.customerNumber
+FROM customers c, payments p
+WHERE YEAR(p.paymentDate) = 2003
+AND c.customerNumber = p.customerNumber );
 ```
   
