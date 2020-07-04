@@ -739,34 +739,87 @@ ORDER BY YEAR(paymentDate) ASC, MONTH(paymentDate) ASC;
 #### The percentage value of each product stock on hand as a percentage of the stock on hand for product line to which it belongs
 Order the report by product line and percentage value within product line descending. Show percentages with two decimal places
 ```sql
+SELECT CONCAT(ROUND(pd.quantityInStock / tb1.pd_stock * 100, 2), '%') AS pd_stock_percent, pd.productline, pd.productName
+FROM products pd, 
+(SELECT SUM(quantityInStock) AS pd_stock, productLine
+FROM products GROUP BY productLine) AS tb1
+WHERE tb1.productLine = pd.productLine
+GROUP BY pd.productLine, pd.productName
+ORDER BY pd.productLine, ROUND(pd.quantityInStock / tb1.pd_stock * 100, 2) DESC;
 ```
 #### For orders containing more than two products and report those products that constitute more than 50 percent of the value of the order
 ```sql
+
+SELECT od.orderNumber, od.productCode, od.priceEach * od.quantityOrdered AS prod_val, ROUND(tb1.total_val, 2) AS total_val
+FROM orderdetails od,(
+SELECT orderNumber,  SUM(priceEach * quantityOrdered) AS total_val, COUNT(DISTINCT productCode) AS CNT
+FROM orderdetails
+GROUP BY orderNumber
+HAVING CNT > 2) AS tb1
+WHERE tb1.orderNumber = od.orderNumber AND od.priceEach * od.quantityOrdered > 0.5 * tb1.total_val
+GROUP BY od.orderNumber, od.productCode
+ORDER BY od.orderNumber;
 ```
 
 ## Spatial data
 The Offices and Customers tables contain the latitude and longitude of each office and customer in officeLocation and customerLocation, respectively, in POINT format. Conventionally, latitude and longitude and reported as a pair of points, with latitude first.
-
+A **negative latitude** means **South** of the Equator, and a **negative longitude** means **West** of the Prime Meridian
 #### Which customers are in the Southern Hemisphere
 ```sql
+SELECT ST_X(customerLocation) AS LA, customerName
+FROM classicmodels.customers
+WHERE  ST_X(customerLocation) < 0;
 ``` 
 #### Which US customers are south west of the New York office
 ```sql
+SELECT  customerName
+FROM customers c, offices ofc
+WHERE  ofc.state = 'NY'
+AND ST_Y(c.customerLocation)  < ST_Y(ofc.officeLocation)
+AND ST_X(c.customerLocation) < ST_X(ofc.officeLocation);
 ```
 #### Which customers are closest to the Tokyo office 
 (i.e., closer to Tokyo than any other office)
 ```sql
+SELECT ROUND(MIN(ACOS(SIN(lat1*PI()/180)*SIN(lat2*PI()/180)+COS(lat1*PI()/180)*COS(lat2*PI()/180)* COS((lon1-lon2)*PI()/180))*180/PI())*60*1.8532, 1)  AS MIN_DIS, tb1.customerName,
+ofc1.city AS ofc_city, tb1.city AS customer_city
+FROM 
+(SELECT ST_X(c.customerLocation) AS lat1, ST_Y(c.customerLocation) AS lon1,  ST_X(ofc.officeLocation) AS lat2, ST_X(ofc.officeLocation) AS lon2,
+ c.customerNumber, c.customerName,c.city, ofc.officeCode
+FROM customers c, offices ofc) AS tb1, offices ofc1
+WHERE ofc1.city = 'Tokyo';
+
 ```
 #### Which French customer is furthest from the Paris office
 ```sql
+SELECT ROUND(MAX(ACOS(SIN(lat1*PI()/180)*SIN(lat2*PI()/180)+COS(lat1*PI()/180)*COS(lat2*PI()/180)* COS((lon1-lon2)*PI()/180))*180/PI()*60*1.8532), 1)  AS MAX_DIS, tb1.customerName
+FROM 
+(SELECT ST_X(c.customerLocation) AS lat1, ST_Y(c.customerLocation) AS lon1,  ST_X(ofc.officeLocation) AS lat2, ST_X(ofc.officeLocation) AS lon2,
+ c.customerNumber, c.customerName, ofc.city
+FROM customers c, offices ofc
+WHERE ofc.city = 'Paris'
+AND c.country = 'France'
+) AS tb1;
 ```
 #### Who is the northernmost customer
 ```sql
+SELECT ROUND(MAX(ST_X(c.customerLocation)),2) AS lat, customerName
+FROM customers c;
 ```
 #### What is the distance between the Paris and Boston offices
+
 To be precise for long distances, the distance in kilometers, as the crow flies, between two points when you have latitude and longitude, is (ACOS(SIN(lat1*PI()/180)*SIN(lat2*PI()/180)+COS(lat1*PI()/180)*COS(lat2*PI()/180)* COS((lon1-lon2)*PI()/180))*180/PI())*60*1.8532
 
 ```sql
+SELECT ROUND(ACOS(SIN(lat1*PI()/180)*SIN(lat2*PI()/180)+COS(lat1*PI()/180)*COS(lat2*PI()/180)* COS((lon1-lon2)*PI()/180))*180/PI()*60*1.8532, 1)  AS DIS
+FROM
+(SELECT ST_X(ofc1.officeLocation) AS lat1, ST_Y(ofc1.officeLocation) AS lon1,  ST_X(ofc.officeLocation) AS lat2, ST_X(ofc.officeLocation) AS lon2
+FROM offices ofc1, offices ofc
+WHERE ofc.city = 'Paris'
+AND ofc1.city = 'Boston'
+) AS tb1;
+
+
 ```
 
 
