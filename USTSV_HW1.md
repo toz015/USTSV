@@ -85,7 +85,18 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
   - [26 Compute the ratio of payments for each customer for 2003 versus 2004](#Compute-the-ratio-of-payments-for-each-customer-for-2003-versus-2004)
   - [27 Find the products sold in 2003 but not 2004](#Find-the-products-sold-in-2003-but-not-2004)
   - [28 Find the customers without payments in 2003](#Find-the-customers-without-payments-in-2003)
-
+- [Correlated subqueries](#Correlated-subqueries)
+  - [1 Who reports to Mary Patterson](#Who-reports-to-Mary-Patterson)
+  - [2 Which payments in any month and year are more than twice the average for that month and year](#Which-payments-in-any-month-and-year-are-more-than-twice-the-average-for-that-month-and-year)
+  - [3 The percentage value of each product stock on hand as a percentage of the stock on hand for product line to which it belongs](#The-percentage-value-of-each-product-stock-on-hand-as-a-percentage-of-the-stock-on-hand-for-product-line-to-which-it-belongs)
+  - [4 For orders containing more than two products, report those products that constitute more than 50% of the value of the order](#For-orders-containing-more-than-two-products-and-report-those-products-that-constitute-more-than-50-percent-of-the-value-of-the-order)
+- [Spatial data](#Spatial-data)
+  - [1 Which customers are in the Southern Hemisphere](#Which-customers-are-in-the-Southern-Hemisphere)
+  - [2 Which US customers are south west of the New York office](#Which-US-customers-are-south-west-of-the-New-York-office)
+  - [3 Which customers are closest to the Tokyo office](#Which-customers-are-closest-to-the-Tokyo-office)
+  - [4 Which French customer is furthest from the Paris office](#Which-French-customer-is-furthest-from-the-Paris-office)
+  - [5 Who is the northernmost customer](#Who-is-the-northernmost-customer)
+  - [6 What is the distance between the Paris and Boston offices](#What-is-the-distance-between-the-Paris-and-Boston-offices)
 
 <!-- /MarkdownTOC -->
 ## Single entity
@@ -703,4 +714,62 @@ FROM customers c, payments p
 WHERE YEAR(p.paymentDate) = 2003
 AND c.customerNumber = p.customerNumber );
 ```
-  
+## Correlated subqueries
+#### Who reports to Mary Patterson
+```sql
+SELECT CONCAT(e1.firstName, ' ', e1.lastName) AS Name 
+FROM employees e1, employees e2
+WHERE e1.reportsTo = e2.employeeNumber
+AND e2.firstName = 'Mary' AND e2.lastName = 'Patterson';
+```
+
+#### Which payments in any month and year are more than twice the average for that month and year
+(i.e. compare all payments in Oct 2004 with the average payment for Oct 2004)? Order the results by the date of the payment. You will need to use the date functions.
+```sql
+SELECT checkNumber, amount, ROUND(tb1.pay, 2) AS pay_amount, YEAR(paymentDate) AS YR, MONTH(paymentDate) AS MT
+FROM payments p, 
+(SELECT YEAR(paymentDate) AS YR, MONTH(paymentDate) AS MT, AVG(amount) AS pay
+FROM payments 
+GROUP BY YEAR(paymentDate), MONTH(paymentDate)) AS tb1
+WHERE amount > 2 * tb1.pay 
+AND YEAR(p.paymentDate) = tb1.YR AND MONTH(p.paymentDate)  = tb1.MT
+GROUP BY YEAR(paymentDate), MONTH(paymentDate)
+ORDER BY YEAR(paymentDate) ASC, MONTH(paymentDate) ASC;
+```
+#### The percentage value of each product stock on hand as a percentage of the stock on hand for product line to which it belongs
+Order the report by product line and percentage value within product line descending. Show percentages with two decimal places
+```sql
+```
+#### For orders containing more than two products and report those products that constitute more than 50 percent of the value of the order
+```sql
+```
+
+## Spatial data
+The Offices and Customers tables contain the latitude and longitude of each office and customer in officeLocation and customerLocation, respectively, in POINT format. Conventionally, latitude and longitude and reported as a pair of points, with latitude first.
+
+#### Which customers are in the Southern Hemisphere
+```sql
+``` 
+#### Which US customers are south west of the New York office
+```sql
+```
+#### Which customers are closest to the Tokyo office 
+(i.e., closer to Tokyo than any other office)
+```sql
+```
+#### Which French customer is furthest from the Paris office
+```sql
+```
+#### Who is the northernmost customer
+```sql
+```
+#### What is the distance between the Paris and Boston offices
+To be precise for long distances, the distance in kilometers, as the crow flies, between two points when you have latitude and longitude, is (ACOS(SIN(lat1*PI()/180)*SIN(lat2*PI()/180)+COS(lat1*PI()/180)*COS(lat2*PI()/180)* COS((lon1-lon2)*PI()/180))*180/PI())*60*1.8532
+
+```sql
+```
+
+
+
+
+
