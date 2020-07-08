@@ -290,18 +290,22 @@ ORDER BY orderDate DESC;
 ```
 #### List the names of customers and their corresponding order number where a particular order from that customer has a value greater than 25000 dollar
 ```sql
- 
-SELECT DISTINCT customerName, o.orderNumber 
-FROM orderdetails od, orders o, customers c
-WHERE c.customerNumber = o.customerNumber AND od.orderNumber = o.orderNumber
-AND od.quantityOrdered * od.priceEach
-```
-#### Are there any products that appear on all orders
-```sql
 SELECT customerName, o.orderNumber , ROUND(SUM(od.quantityOrdered * od.priceEach ), 2) AS VAL
 FROM orderdetails od, orders o, customers c
 WHERE c.customerNumber = o.customerNumber AND od.orderNumber = o.orderNumber
 GROUP BY o.orderNumber HAVING VAL > 25000
+
+```
+#### Are there any products that appear on all orders
+```sql
+ 
+SELECT productCode, productName FROM
+(SELECT p.productCode, p.productName, count(DISTINCT od.orderNumber) as order_num FROM products p, orderdetails od
+WHERE p.productCode = od.productCode
+GROUP BY p.productCode, p.productName) AS TB1, 
+(SELECT COUNT(distinct orderNumber) AS Total FROM orderdetails ) AS TB2
+WHERE TB1.order_num = TB2.Total;
+
 ```
 #### List the names of products sold at less than eighty percent of the MSRP
 ```sql
