@@ -9,6 +9,9 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
 - [1. Top three cities that we have employees](#Top-three-cities)
 - [2. Profit margin on each productlines](#Profit-margin-on-each-productlines)
 - [3. Top 3 sales rep](#Top-3-sales-rep)
+- [4. Employee Salary Change Times](#Employee-Salary-Change-Times)
+- [5. Top 3 Salary](#Top-3-Salary)
+#### Employee Salary Change Times
 
 <!-- /MarkdownTOC -->
 
@@ -30,9 +33,9 @@ LIMIT 3;
 Profit margin= sum(profit if all sold) - sum(cost of each=buyPrice) / sum (buyPrice)
 Product line = each product belongs to a product line. You need group by product line. 
 ```sql
-SELECT p.productline, ROUND(SUM(profit), 2) AS productLine_profit
+SELECT p.productline, ROUND(AVG(profit), 2) AS productLine_profit
 FROM products p, (
-SELECT productLine, productCode, (MSRP - buyPrice) * quantityInStock AS profit
+SELECT productLine, productCode, (MSRP - buyPrice) * quantityInStock/(quantityInStock * buyPrice) AS profit
 FROM products 
 GROUP BY productLine, productCode) AS tb1
 WHERE p.productLine = tb1.productLine
@@ -87,4 +90,50 @@ CALL promote_to_manager('Manager')
 ```
 C
 ```sql
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Leaving_process`(IN employ_num INT)
+BEGIN
+UPDATE customers c, employees e
+SET c.salesRepEmployeeNumber = e.reportsTo
+WHERE c.salesRepEmployeeNumber = employ_num AND 
+e.employeeNumber = employ_num;
+
+UPDATE employees e1, employees e2
+SET e1.reportsTo = e2.reportsTo
+WHERE e1.reportsTo = employ_num AND 
+e2.employeeNumber = employ_num;
+
+DELETE 
+FROM employees e3
+WHERE e3.employeeNumber = employ_num;
+END
 ```
+#### Employee Salary Change Times
+Ask to provide a table to show for each employee in a certain department how many times their Salary changes 
+
+=======following challenge:
+Employee 
+[employee_id, employee_name, gender, current_salary, department_id, start_date, term_date]
+
+Employee_salary 
+[employee_id, salary, year, month]
+
+Department 
+[department_id, department_name]
+
+```sql
+
+```
+
+#### Top 3 Salary
+
+```sql
+SELECT
+        e.employee_name, e.current_salary, d.department_name
+FROM Employee e, Employee_salary es, Department d
+WHERE e. employee_id = es. employee_id
+AND e. department_id = d. department_id
+GROUP BY d. department_id 
+ORDER BY e. current_salary DESC LIMIT3;
+
+```
+
