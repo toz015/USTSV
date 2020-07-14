@@ -20,7 +20,8 @@ You can access ClassicModels at richardtwatson.com with accountid=db1 and passwo
 Expected result:
 
 ```sql
-SELECT o.city, COUNT(e.employeeNumber) AS employee_count
+SELECT
+    o.city, COUNT(e.employeeNumber) AS employee_count
 FROM employees e, offices o
 WHERE e.officeCode = o.officeCode
 GROUP BY o.city
@@ -33,9 +34,11 @@ LIMIT 3;
 Profit margin= sum(profit if all sold) - sum(cost of each=buyPrice) / sum (buyPrice)
 Product line = each product belongs to a product line. You need group by product line. 
 ```sql
-SELECT p.productline, ROUND(AVG(profit), 2) AS productLine_profit
+SELECT 
+    p.productline, ROUND(AVG(profit), 2) AS productLine_profit
 FROM products p, (
-SELECT productLine, productCode, (MSRP - buyPrice) * quantityInStock/(quantityInStock * buyPrice) AS profit
+SELECT 
+    productLine, productCode, (MSRP - buyPrice) * quantityInStock/(quantityInStock * buyPrice) AS profit
 FROM products 
 GROUP BY productLine, productCode) AS tb1
 WHERE p.productLine = tb1.productLine
@@ -51,9 +54,11 @@ ORDER BY productLine_profit DESC;
 
 A
 ```sql
-SELECT ROUND(SUM(tb1.order_amonut),2) AS total_sales, c1.salesRepEmployeeNumber, CONCAT(e.firstName, ' ', e.lastName) AS employee_name
+SELECT 
+    ROUND(SUM(tb1.order_amonut),2) AS total_sales, c1.salesRepEmployeeNumber, CONCAT(e.firstName, ' ', e.lastName) AS employee_name
 FROM customers c1, (
-SELECT o.customerNumber, SUM(od.quantityOrdered * priceEach) AS order_amonut
+SELECT 
+    o.customerNumber, SUM(od.quantityOrdered * priceEach) AS order_amonut
 FROM orderS o, orderdetails od
 WHERE o.orderNumber = od.orderNumber
 GROUP BY o.customerNumber) AS tb1, employees e
@@ -66,22 +71,25 @@ B
 ```sql
 CREATE DEFINER=`root`@`localhost` PROCEDURE `promote_to_manager`( IN title VARCHAR(30))
 BEGIN
-UPDATE employees e
-SET e.jobTitle = title
-WHERE e.employeeNumber IN (
-SELECT salesRepEmployeeNumber FROM  (
-SELECT ROUND(SUM(tb1.order_amonut),2) AS total_sales, c1.salesRepEmployeeNumber, CONCAT(e.firstName, ' ', e.lastName) AS employee_name
-FROM customers c1, (
-SELECT o.customerNumber, SUM(od.quantityOrdered * priceEach) AS order_amonut
-FROM orderS o, orderdetails od
-WHERE o.orderNumber = od.orderNumber
-GROUP BY o.customerNumber) AS tb1, employees e
-WHERE tb1.customerNumber = c1.customerNumber AND e.employeeNumber = c1.salesRepEmployeeNumber
-GROUP BY c1.salesRepEmployeeNumber
-ORDER BY total_sales
-LIMIT 3
-) AS tb1
-);
+    UPDATE employees e
+    SET e.jobTitle = title
+        WHERE e.employeeNumber IN (
+    SELECT 
+        salesRepEmployeeNumber FROM  (
+    SELECT
+        ROUND(SUM(tb1.order_amonut),2) AS total_sales, c1.salesRepEmployeeNumber, CONCAT(e.firstName, ' ', e.lastName) AS employee_name
+    FROM customers c1, (
+    SELECT 
+        o.customerNumber, SUM(od.quantityOrdered * priceEach) AS order_amonut
+    FROM orderS o, orderdetails od
+    WHERE o.orderNumber = od.orderNumber
+    GROUP BY o.customerNumber) AS tb1, employees e
+    WHERE tb1.customerNumber = c1.customerNumber AND e.employeeNumber = c1.salesRepEmployeeNumber
+    GROUP BY c1.salesRepEmployeeNumber
+    ORDER BY total_sales
+    LIMIT 3
+        ) AS tb1
+    );
 END
 
 -- test
@@ -92,19 +100,19 @@ C
 ```sql
 CREATE DEFINER=`root`@`localhost` PROCEDURE `Leaving_process`(IN employ_num INT)
 BEGIN
-UPDATE customers c, employees e
-SET c.salesRepEmployeeNumber = e.reportsTo
-WHERE c.salesRepEmployeeNumber = employ_num AND 
-e.employeeNumber = employ_num;
+    UPDATE customers c, employees e
+        SET c.salesRepEmployeeNumber = e.reportsTo
+        WHERE c.salesRepEmployeeNumber = employ_num AND 
+        e.employeeNumber = employ_num;
 
-UPDATE employees e1, employees e2
-SET e1.reportsTo = e2.reportsTo
-WHERE e1.reportsTo = employ_num AND 
-e2.employeeNumber = employ_num;
+    UPDATE employees e1, employees e2
+        SET e1.reportsTo = e2.reportsTo
+        WHERE e1.reportsTo = employ_num AND 
+        e2.employeeNumber = employ_num;
 
-DELETE 
-FROM employees e3
-WHERE e3.employeeNumber = employ_num;
+    DELETE 
+        FROM employees e3
+        WHERE e3.employeeNumber = employ_num;
 END
 ```
 #### Employee Salary Change Times
@@ -159,10 +167,10 @@ and employee has not left the company.
 SELECT
         e.employee_name, e.current_salary, d.department_name
 FROM Employee e, Employee_salary es, Department d
-WHERE e. employee_id = es. employee_id
-AND e. department_id = d. department_id
-GROUP BY d. department_id 
-ORDER BY e. current_salary DESC LIMIT3;
+WHERE e.employee_id = es.employee_id
+AND e.department_id = d.department_id
+GROUP BY d.department_id 
+ORDER BY e.current_salary DESC LIMIT3;
 
 ```
 
