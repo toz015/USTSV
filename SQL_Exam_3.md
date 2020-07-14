@@ -108,9 +108,11 @@ WHERE e3.employeeNumber = employ_num;
 END
 ```
 #### Employee Salary Change Times
+
 Ask to provide a table to show for each employee in a certain department how many times their Salary changes 
 
 =======following challenge:
+
 Employee 
 [employee_id, employee_name, gender, current_salary, department_id, start_date, term_date]
 
@@ -120,11 +122,38 @@ Employee_salary
 Department 
 [department_id, department_name]
 
+Reference:https://stackoverflow.com/questions/27969108/sql-count-changes-in-column
+
 ```sql
+WITH previous_salary AS
+(
+  SELECT
+    e.employee_id,
+    e.department_id,
+    es.salary,
+    LAG(es.salary, 1, NULL) OVER (PARTITION BY es.employee_id ORDER BY es.year, es.month) AS prev_salary
+  FROM Employee e, Employee_salary es
+    WHERE es.employee_id = e.employee_id
+)
+SELECT
+    employee_id,
+    department_id,
+    SUM(CASE
+        WHEN salary <> prev_salary THEN 1
+        ELSE 0
+    END) AS count
+FROM previous_salary
+WHERE prev_salary IS NOT NULL
+GROUP BY employee_id, department_id
+ORDER BY employee_id;
 
 ```
 
 #### Top 3 Salary
+
+Ask to provide a table to show for each department the top 3 salary with employee name 
+and employee has not left the company.
+
 
 ```sql
 SELECT
