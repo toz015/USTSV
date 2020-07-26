@@ -55,12 +55,16 @@ FROM(
 #### BizOps Table
 Q3: Create a table in the database with the information from all tables for the department of  ‘BizOps’.
 
-
 ```sql
 CREATE TABLE BizOps_info 
  AS 
- SELECT * FROM department d
- WHERE d.dept_name = 'BizOps';
+ SELECT * 
+ FROM 
+ department d, employee e, level ll, location lc
+ WHERE  d.dept_name = 'BizOps',
+ 	d.dept_sk = e.dept_sk,
+	e.location_sk = lc.location_sk,
+	e.level_sk = ll.level_sk;
 ```
 
 
@@ -69,7 +73,10 @@ Q4: Pull a list of managers and their direct reports, Include Ids and names for 
 
 ```sql
 
-SELECT e.employee_id, e.name, e.man
+SELECT 
+	e.employee_id, e.name, e.manager_id, e1.name
+FROM employee e, employee e1, (SELECT DISTINCT manger_id FROM employee) AS tb1
+WHERE e.employee_id = tb1.manager_id AND e.manager_id = e1.employee_id;
 
 ```
 
@@ -102,7 +109,7 @@ Q6: Find the average tenure of all employees by level. If an employee is still a
 ```sql
 SELECT AVG(DATEDIFF(d, start_date, end_date)) AS avg_tenure, l.level_sk, l.level_name
 FROM (
-  SELECT start_date, e.level_sk
+  SELECT start_date, e.level_sk, 
          CASE WHEN term_date IS NOT NULL THEN term_date
          ELSE GETDATE() END AS end_date) AS CTE 
          LEFT JOIN level l on CTE.level_sk = l.level_sk       
