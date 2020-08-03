@@ -2,9 +2,16 @@
 
 
 
-##### The following questions go over the knowledge of ML Training Models (Linear Regression, Logistic Regression). They are from the end of Chapter 4 of Aurelien Geron's *Hands-On Machine Learning with Scikit-Learn & TensorFlow*. 
+##### The following questions go over the knowledge of ML. They are from the end of several chapters of Aurelien Geron's *Hands-On Machine Learning with Scikit-Learn & TensorFlow*. 
+
+<!-- MarkdownTOC -->
+- [Chapter 2](#Chapter-2-Training-Model)
 
 
+<!-- MarkdownTOC -->
+
+
+## Chapter 2 Training Model
 
 ### 1. What Linear Regression training algorithm can you use if you have a training set with millions of features?
 
