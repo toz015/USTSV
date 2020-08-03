@@ -61,4 +61,6 @@
     * Elastic Net is preferred over Lasso if there are lots of features or lots of strongly correlated features.
 
 ### 11. Suppose you want to classify pictures as outdoor/indoor and daytime/nighttime. Should you implement two Logistic Regression classifier or one Softmax Regression classifier?
-    * You should implement two Logistic Regression classifiers, because there are two different binary classifying (outdoor vs indoor, daytime/nighttime). All pictures can be one from each classifier. Softmax Regression classifies into only one class out of all of them.
+
+    * You should implement two Logistic Regression classifiers, because there are two different binary classifying (outdoor/indoor, daytime/nighttime). All pictures can be one from each classifier. Softmax Regression classifies into only one class out of all of them.
+    * The model suffers from high bias, because the errors are both high, indicating wrong assumptions and therefore underfitting. In order to reduce high bias, you have to decrease alpha.
