@@ -6,11 +6,11 @@
 
 
 
-**1. What Linear Regression training algorithm can you use if you have a training set with millions of features?**
+##**1. What Linear Regression training algorithm can you use if you have a training set with millions of features?**
 
    *Since there are lots of features, we cannot use Normal Equations (it will be very, very computationally expensive). Instead we can use Gradient Descent.*
 
-**2. Suppose the features in your training set have very different scales. What algorithms might suffer from this, and how? What can you do about it?**
+##**2. Suppose the features in your training set have very different scales. What algorithms might suffer from this, and how? What can you do about it?**
 
    *The Gradient Descent suffers from features of different scales, because the model will take a longer time to reach the global maximum. We can always scale the features to eliminate this problem.*
 
