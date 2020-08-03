@@ -48,19 +48,18 @@
 
 ### 10. Why would you want to use:
 
-  - Ridge Regression instead of plain Linear Regression?
+  * Ridge Regression instead of plain Linear Regression?
 
-    * Ridge Regression regularizes the Linear Regression, to avoid overfitting.
+    - Ridge Regression regularizes the Linear Regression, to avoid overfitting.
 
-  - Lasso instead of Ridge Regression?
+  * Lasso instead of Ridge Regression?
 
-    * Lasso, which uses L1 norm regularization, automatically eliminates the weights of the least important features and therefore performs feature selection.
+    - Lasso, which uses L1 norm regularization, automatically eliminates the weights of the least important features and therefore performs feature selection.
 
-  - Elastic Net instead of Lasso?
+  * Elastic Net instead of Lasso?
 
-    * Elastic Net is preferred over Lasso if there are lots of features or lots of strongly correlated features.
+    - Elastic Net is preferred over Lasso if there are lots of features or lots of strongly correlated features.
 
 ### 11. Suppose you want to classify pictures as outdoor/indoor and daytime/nighttime. Should you implement two Logistic Regression classifier or one Softmax Regression classifier?
 
-    * You should implement two Logistic Regression classifiers, because there are two different binary classifying (outdoor/indoor, daytime/nighttime). All pictures can be one from each classifier. Softmax Regression classifies into only one class out of all of them.
-    * The model suffers from high bias, because the errors are both high, indicating wrong assumptions and therefore underfitting. In order to reduce high bias, you have to decrease alpha.
+   * You should implement two Logistic Regression classifiers, because there are two different binary classifying (outdoor/indoor, daytime/nighttime). All pictures can be one from each classifier. Softmax Regression classifies into only one class out of all of them.
