@@ -6,23 +6,23 @@
 
 
 
-##**1. What Linear Regression training algorithm can you use if you have a training set with millions of features?**
+## **1. What Linear Regression training algorithm can you use if you have a training set with millions of features?**
 
    *Since there are lots of features, we cannot use Normal Equations (it will be very, very computationally expensive). Instead we can use Gradient Descent.*
 
-##**2. Suppose the features in your training set have very different scales. What algorithms might suffer from this, and how? What can you do about it?**
+## **2. Suppose the features in your training set have very different scales. What algorithms might suffer from this, and how? What can you do about it?**
 
    *The Gradient Descent suffers from features of different scales, because the model will take a longer time to reach the global maximum. We can always scale the features to eliminate this problem.*
 
-**3. Can Gradient Descent get stuck in a local minimum when training a Logistic Regression model?**
+## **3. Can Gradient Descent get stuck in a local minimum when training a Logistic Regression model?**
 
    *Since Logistic Regression Model cost function is convex, there is no local minimum.*
 
-**4. Do all Gradient Descent algorithms lead to the same model provided you let them run long enough?**
+## **4. Do all Gradient Descent algorithms lead to the same model provided you let them run long enough?**
 
    *No. If the learning rate is too high, then the model can diverge. It can also only reach the local minimum based on where the initialization is.*
 
-**5. Suppose you use Batch Gradient Descent and you plot the validation error at every epoch. If you notice that the validation error consistently goes up, what is likely going on? How can you fix this?**
+## 5. Suppose you use Batch Gradient Descent and you plot the validation error at every epoch. If you notice that the validation error consistently goes up, what is likely going on? How can you fix this?**
 
    *If the validation error consistently goes up, that means the model could be diverging because of high learning rate. If the training error also goes up, that is the indication of diverging. You can fix that by lowering the learning rate and then re-training. If the training error is **not** increasing, then your model is overfitting and you have to retrain with a different model.*
 
